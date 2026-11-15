@@ -1,5 +1,6 @@
 import requests 
 from bs4 import BeautifulSoup
+import csv
 
 url = "https://practice.scrapingcentral.com/challenges/static/tables/simple"
 
@@ -16,3 +17,9 @@ for row in rows:
         "price": row.select_one("td:nth-child(4)").get_text(strip=True),
         "stock": row.select_one("td:nth-child(5)").get_text(strip=True),
     })
+
+with open("products.csv", "w",newline="", encoding="utf-8") as file:
+    fieldnames = ['sku', 'name', 'brand', 'price', 'stock']
+    writer = csv.DictWriter(file, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(products)
